@@ -6,8 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Lock, User, ArrowLeft } from "lucide-react";
+import { useAppContext } from "../context/AppContext.jsx"; // fixed import
 
 const Auth = () => {
+  const { axios } = useAppContext(); // use axios from context
   const [isLoading, setIsLoading] = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -18,81 +20,87 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
- // Signup
+  // Signup
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    const res = await fetch("http://localhost:5000/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    try {
+      const { data } = await axios.post("/api/auth/signup", {
         name: signupName,
         email: signupEmail,
         password: signupPassword,
-      }),
-    });
-
-    const data = await res.json();
-    setIsLoading(false);
-
-    if (data.success) {
-      localStorage.setItem("token", data.token);
-      toast({
-        title: `Welcome ${signupName}!`,
-        description: "User registered successfully.",
       });
-      navigate("/");
-    } else {
+
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        toast({
+          title: `Welcome ${signupName}!`,
+          description: "User registered successfully.",
+        });
+        navigate("/");
+      } else {
+        toast({
+          title: "Error",
+          description: data.message || "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
-        description: data.message || "Something went wrong. Please try again.",
+        description: error.response?.data?.message || "Server error. Try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
-
 
   // Login
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    try {
+      const { data } = await axios.post("/api/auth/login", {
         email: loginEmail,
         password: loginPassword,
-      }),
-    });
-
-    const data = await res.json();
-    setIsLoading(false);
-
-    if (data.success) {
-      localStorage.setItem("token", data.token);
-      toast({
-        title: "Welcome back!",
-        description: "User Logged In successfully.",
       });
-      navigate("/");
-    } else {
+
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        toast({
+          title: "Welcome back!",
+          description: "User logged in successfully.",
+        });
+        navigate("/");
+      } else {
+        toast({
+          title: "Error",
+          description: data.message || "Invalid credentials.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
-        description: data.message || "Invalid credentials.",
+        description: error.response?.data?.message || "Server error. Try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
-
-
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-accent/5 animate-gradient" />
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      <div
+        className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse"
+        style={{ animationDelay: "1s" }}
+      />
 
       <Button
         variant="ghost"

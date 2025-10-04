@@ -13,21 +13,21 @@ const Home = () => {
   const [error, setError] = useState("");
 
 
-  useEffect(() => {
-    const fetchProblems = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/problems");
-        setProblems(response.data);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load problems.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchProblems = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:5000/api/problems");
+  //       setProblems(response.data);
+  //     } catch (err) {
+  //       console.error(err);
+  //       setError("Failed to load problems.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchProblems();
-  }, []);
+  //   fetchProblems();
+  // }, []);
 
 
   return (

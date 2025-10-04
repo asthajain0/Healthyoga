@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import ProblemCard from "@/components/ProblemCard";
 import { Leaf } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { useAppContext } from "../context/AppContext.jsx"
 
 const Problems = () => {
+
+    const {axios} = useAppContext();
 
     const [problems, setProblems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -13,7 +15,7 @@ const Problems = () => {
     useEffect(() => {
       const fetchProblems = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/api/problems");
+          const response = await axios.get("/api/problems");
           setProblems(response.data);
         } catch (err) {
           console.error(err);

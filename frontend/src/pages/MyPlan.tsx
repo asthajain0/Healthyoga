@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { exercises } from "@/data/yogaData";
 import ExerciseCard from "@/components/ExerciseCard";
 import { Card } from "@/components/ui/card";
 import { Calendar, Flame } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { useAppContext } from "../context/AppContext.jsx"
 
 const MyPlan = () => {
+
+  const {axios} = useAppContext();
+
   const [savedExercises, setSavedExercises] = useState([]);
   const [streak, setStreak] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -22,7 +25,7 @@ const MyPlan = () => {
         }
 
         // ✅ Get user's saved exercises from backend
-        const res = await axios.get("http://localhost:5000/api/plan", {
+        const res = await axios.get("/api/plan", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

@@ -11,7 +11,6 @@ import MyPlan from "./pages/MyPlan";
 import Info from "./pages/Info";
 import NotFound from "./pages/NotFound";
 import BottomNav from "./components/BottomNav";
-import Navbar from "./components/navbar";
 import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();

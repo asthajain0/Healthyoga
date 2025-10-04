@@ -1,12 +1,15 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import ExerciseCard from "@/components/ExerciseCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Heart } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { useAppContext } from "../context/AppContext.jsx"
 
 const RecommendedExercises = () => {
+
+  const {axios} = useAppContext();
+
   const { problemId } = useParams();
   const [problem, setProblem] = useState(null);
   const [exercises, setExercises] = useState([]);
@@ -17,13 +20,13 @@ const RecommendedExercises = () => {
     const fetchData = async () => {
       try {
         // Fetch all problems
-        const problemsRes = await axios.get("http://localhost:5000/api/problems");
+        const problemsRes = await axios.get("/api/problems");
         const foundProblem = problemsRes.data.find(p => p.id === problemId);
         setProblem(foundProblem);
 
         if (foundProblem) {
           // Fetch exercises for the problem category
-          const exercisesRes = await axios.get(`http://localhost:5000/api/poses/${problemId}`);
+          const exercisesRes = await axios.get(`/api/poses/${problemId}`);
           setExercises(exercisesRes.data);
         } else {
           setExercises([]);

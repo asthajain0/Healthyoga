@@ -1,14 +1,17 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Clock, TrendingUp, AlertTriangle, BookmarkPlus, BookmarkCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
+import {useAppContext} from '../context/AppContext.jsx'
 
 const ExerciseDetail = () => {
+
+  const {axios} = useAppContext();
+
   const { exerciseId } = useParams();
   const [exercise, setExercise] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
@@ -17,12 +20,12 @@ const ExerciseDetail = () => {
   useEffect(() => {
     const fetchExercise = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/id/${exerciseId}`);
+        const res = await axios.get(`/api/id/${exerciseId}`);
         setExercise(res.data);
 
         const token = localStorage.getItem("token");
         if (token) {
-          const planRes = await axios.get("http://localhost:5000/api/plan", {
+          const planRes = await axios.get("/api/plan", {
             headers: { Authorization: `Bearer ${token}` },
           });
 
@@ -57,7 +60,7 @@ const ExerciseDetail = () => {
       if (isSaved) {
         // remove from plan
         await axios.delete(
-          `http://localhost:5000/api/plan/${exerciseId}`,
+          `/api/plan/${exerciseId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         toast({
@@ -67,7 +70,7 @@ const ExerciseDetail = () => {
       } else {
         // add to plan
         await axios.post(
-          `http://localhost:5000/api/plan/`,
+          `/api/plan/`,
           { exerciseId },
           { headers: { Authorization: `Bearer ${token}` } }
         );
