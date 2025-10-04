@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import ProblemCard from "@/components/ProblemCard";
 import heroImage from "@/assets/hero-yoga.jpg";
 import { Sparkles } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 const Home = () => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
 
   useEffect(() => {
     const fetchProblems = async () => {
@@ -27,21 +29,24 @@ const Home = () => {
     fetchProblems();
   }, []);
 
+
   return (
-    <div className="min-h-screen pb-20 calm-gradient">
+    <div className="min-h-screen calm-gradient">
       {/* Hero Section */}
-      <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[90vh] flex-col items-center justify-center overflow-hidden ">
         <div className="absolute inset-0">
           <img 
             src={heroImage} 
             alt="Yoga for Wellness" 
-            className="w-full h-full object-cover"
+            className="w-screen h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background"></div>
+          
         </div>
+        <Navbar/>
         
         <div className="relative z-10 text-center px-4 max-w-3xl mx-auto animate-fade-in">
-          <div className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+          <div className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 mt-20">
             <Sparkles className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium text-primary">Yoga for Wellness</span>
           </div>
@@ -66,7 +71,7 @@ const Home = () => {
       </section>
 
       {/* Quick Access Problems */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
+      {/* <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             What do you need help with?
@@ -87,7 +92,7 @@ const Home = () => {
             ))}
           </div>
         )}
-      </section>
+      </section> */}
     </div>
   );
 };

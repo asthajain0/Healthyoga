@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import poseRouter from "./routers/poseRouter.js";
+import planRouter from './routers/planRouter.js'
+import userRouter from './routers/userRouter.js'
+import 'dotenv/config.js'
 import "./firebase.js"; // make sure firebase is imported first
 import { db } from "./firebase.js";
 
@@ -9,6 +12,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api", poseRouter);
+app.use("/api/plan", planRouter);
+app.use("/api/auth", userRouter);
 
 app.post("/api/exercises", async (req, res) => {
   try {

@@ -1,11 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Sparkles, Heart, Brain, Leaf } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 const Info = () => {
   return (
     <div className="min-h-screen pb-20 calm-gradient">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <Navbar/>
+      <div className="max-w-4xl mx-auto px-4">
         <div className="mb-12 animate-fade-in text-center">
           <div className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
             <Sparkles className="h-4 w-4 text-primary" />

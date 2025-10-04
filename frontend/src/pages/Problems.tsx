@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProblemCard from "@/components/ProblemCard";
 import { Leaf } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 const Problems = () => {
 
@@ -28,6 +29,7 @@ const Problems = () => {
 
   return (
     <div className="min-h-screen pb-20 calm-gradient">
+      <Navbar/>
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="text-center mb-12 animate-fade-in">
           <div className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm px-4 py-2 rounded-full mb-4">

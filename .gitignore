@@ -17,6 +17,7 @@ backend/.env
 
 # Firebase service account
 backend/serviceAccountKey.json
+backend/serviceAccountKey1.json
 
 # Logs
 logs/

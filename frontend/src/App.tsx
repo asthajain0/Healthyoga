@@ -11,6 +11,8 @@ import MyPlan from "./pages/MyPlan";
 import Info from "./pages/Info";
 import NotFound from "./pages/NotFound";
 import BottomNav from "./components/BottomNav";
+import Navbar from "./components/navbar";
+import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +27,7 @@ const App = () => (
           <Route path="/problems" element={<Problems />} />
           <Route path="/exercises/:problemId" element={<RecommendedExercises />} />
           <Route path="/exercise/:exerciseId" element={<ExerciseDetail />} />
+          <Route path="/auth" element={<Auth/>} />
           <Route path="/my-plan" element={<MyPlan />} />
           <Route path="/info" element={<Info />} />
           <Route path="*" element={<NotFound />} />

@@ -4,6 +4,7 @@ import axios from "axios";
 import ExerciseCard from "@/components/ExerciseCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Heart } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 const RecommendedExercises = () => {
   const { problemId } = useParams();
@@ -62,7 +63,8 @@ const RecommendedExercises = () => {
 
   return (
     <div className="min-h-screen pb-20 calm-gradient">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <Navbar/>
+      <div className="max-w-7xl mx-auto px-4">
         <Link to="/problems">
           <Button variant="ghost" className="mb-6 hover:bg-primary/10 hover:text-black">
             <ArrowLeft className="h-4 w-4 mr-2" />

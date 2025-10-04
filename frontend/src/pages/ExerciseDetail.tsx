@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Clock, TrendingUp, AlertTriangle, BookmarkPlus, BookmarkCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import Navbar from "@/components/Navbar";
 
 const ExerciseDetail = () => {
   const { exerciseId } = useParams();
@@ -19,11 +20,14 @@ const ExerciseDetail = () => {
         const res = await axios.get(`http://localhost:5000/api/id/${exerciseId}`);
         setExercise(res.data);
 
-        // Check if saved
-        const saved = localStorage.getItem("myPlan");
-        if (saved) {
-          const plan = JSON.parse(saved);
-          setIsSaved(plan.includes(exerciseId));
+        const token = localStorage.getItem("token");
+        if (token) {
+          const planRes = await axios.get("http://localhost:5000/api/plan", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          const userPlan = planRes.data.plan || [];
+          setIsSaved(userPlan.includes(exerciseId));
         }
       } catch (err) {
         console.error(err);
@@ -33,27 +37,56 @@ const ExerciseDetail = () => {
     fetchExercise();
   }, [exerciseId]);
 
-  const toggleSave = () => {
-    const saved = localStorage.getItem("myPlan");
-    let plan = saved ? JSON.parse(saved) : [];
-    
-    if (isSaved) {
-      plan = plan.filter((id: string) => id !== exerciseId);
+
+  const toggleSave = async () => {
+    const token = localStorage.getItem("token"); // JWT stored after login
+
+    if (!token) {
+      window.location.href = "/auth";
+      // toast({
+      //   title: "Login Required",
+      //   description: "You need to login to add exercises to your plan.",
+      //   variant: "destructive",
+      // });
+      // redirect to auth
+      
+      return;
+    }
+
+    try {
+      if (isSaved) {
+        // remove from plan
+        await axios.delete(
+          `http://localhost:5000/api/plan/${exerciseId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        toast({
+          title: "Removed from My Plan",
+          description: "Exercise removed from your practice plan",
+        });
+      } else {
+        // add to plan
+        await axios.post(
+          `http://localhost:5000/api/plan/`,
+          { exerciseId },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        toast({
+          title: "Added to My Plan",
+          description: "Exercise saved to your practice plan",
+        });
+      }
+      setIsSaved(!isSaved);
+    } catch (err) {
+      console.error(err);
       toast({
-        title: "Removed from My Plan",
-        description: "Exercise removed from your practice plan"
-      });
-    } else {
-      plan.push(exerciseId);
-      toast({
-        title: "Added to My Plan",
-        description: "Exercise saved to your practice plan"
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
       });
     }
-    
-    localStorage.setItem("myPlan", JSON.stringify(plan));
-    setIsSaved(!isSaved);
   };
+
 
   if (!exercise) {
     return (
@@ -70,11 +103,12 @@ const ExerciseDetail = () => {
 
   return (
     <div className="min-h-screen pb-20 calm-gradient">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <Navbar/>
+      <div className="max-w-4xl mx-auto px-4">
         <Button 
           variant="ghost" 
           onClick={() => window.history.back()}
-          className="mb-6 hover:bg-primary/10"
+          className="mb-6 hover:bg-primary/10 hover:text-black"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
