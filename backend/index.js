@@ -8,7 +8,10 @@ import "./firebase.js"; // make sure firebase is imported first
 import { db } from "./firebase.js";
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://healthyoga.vercel.app",
+  credentials: true, // if using cookies
+}));
 app.use(express.json());
 
 app.use("/api", poseRouter);
