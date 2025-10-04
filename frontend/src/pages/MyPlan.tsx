@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { exercises } from "@/data/yogaData";
 import ExerciseCard from "@/components/ExerciseCard";
 import { Card } from "@/components/ui/card";
 import { Calendar, Flame } from "lucide-react";
@@ -10,9 +9,25 @@ const MyPlan = () => {
 
   const {axios} = useAppContext();
 
+  const [exercises, setExercises] = useState([]);
   const [savedExercises, setSavedExercises] = useState([]);
   const [streak, setStreak] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const res = await axios.get("/api/exercises");
+        if (res.data.success) {
+          setExercises(res.data.exercises);
+        }
+      } catch (error) {
+        console.error("Error fetching exercises:", error);
+      }
+    };
+
+    fetchExercises();
+  }, []);
 
   useEffect(() => {
     const fetchPlan = async () => {

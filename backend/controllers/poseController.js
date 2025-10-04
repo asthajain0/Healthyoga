@@ -32,6 +32,25 @@ export const getExerciseById = async (req, res) => {
   }
 };
 
+export const getAllExercises = async (req, res) => {
+  try {
+    const snapshot = await db.collection("Exercise").get();
+    const exercises = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    res.status(200).json({
+      success: true,
+      exercises,
+    });
+  } catch (error) {
+    console.error("Error fetching exercises:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
 
 export const getAllProblems = async (req, res) => {
   try {
